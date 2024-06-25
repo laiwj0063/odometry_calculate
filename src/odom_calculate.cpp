@@ -3,6 +3,7 @@
 #include <geometry_msgs/Point.h>
 #include <tf/transform_broadcaster.h>
 #include <std_msgs/String.h>
+#include <std_msgs/Float64MultiArray.h>
 #include <iostream>
 #include <cstdint>
 #include <vector>
@@ -59,10 +60,10 @@ public:
         delete republisher;
     }
 
-    void callback(const geometry_msgs::Twist::ConstPtr& msg){
+    void callback(const std_msgs::Float64MultiArray::ConstPtr& msg){
 
-        double omega_L = msg->linear.x;
-        double omega_R = msg->linear.y;
+        double omega_L = msg->data[0];
+        double omega_R = msg->data[1];
         caculate(omega_L,omega_R);
         republisher->publish();
     }
