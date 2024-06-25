@@ -16,7 +16,7 @@
 
 using std::cout;
 
-#define DEBUG
+// #define DEBUG
 
 typedef struct {
   double x;
@@ -121,6 +121,9 @@ int main(int argc, char** argv){
     while (ros::ok()){
         caculate(&velocity,&position);
         geometry_msgs::Point msg;
+        #ifdef DEBUG
+        cout<<"x is "<<position.x<<", y is "<<position.y<<"theta_z is "<<position.th<<"\n";
+        #endif
         msg.x = position.x;
         msg.y = position.y;
         msg.z = position.th;
