@@ -115,8 +115,8 @@ int main(int argc, char** argv){
     position.th = 0.0;
 
     ros::NodeHandle n;
-    ros::Subscriber subleft = n.subscribe("left_velocity", 1, callbackleft);
-    ros::Subscriber subright = n.subscribe("right_velocity", 1, callbackright);
+    ros::Subscriber subleft = n.subscribe("/left_wheel/rpm", 1, callbackleft);
+    ros::Subscriber subright = n.subscribe("/right_wheel/rpm", 1, callbackright);
     ros::Publisher pub = n.advertise<geometry_msgs::Point>("car_position", 1);
     while (ros::ok()){
         caculate(&velocity,&position);
