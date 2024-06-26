@@ -65,9 +65,11 @@ MotionState calculateMotion(Velocity* velocity, double R, double L, Position* po
 
 void callbackleft(const std_msgs::Float64::ConstPtr& data){
     velocity.omega_L = data->data;
+    velocity.omega_L /= 60.0;
 }
 void callbackright(const std_msgs::Float64::ConstPtr& data){
     velocity.omega_R = data->data;
+    velocity.omega_R /= 60.0;
 }
 
 void caculate(Velocity* velocity, Position* position){
