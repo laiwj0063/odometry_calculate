@@ -101,6 +101,9 @@ void caculate(Velocity* velocity, Position* position){
     position->y += motion.vy * dt;
     position->th += motion.omega * dt;
 
+    if(position->th>=360) position->th -=360;
+    else if(position->th<0) position->th += 360;
+
     #ifdef DEBUG
     cout<<"x is "<<position->x<<", y is "<<position->y<<", theta_z is "<<position->th<<"\n";
     cout<<"-------------------------------------------------------------\n";
@@ -126,9 +129,9 @@ int main(int argc, char** argv){
     ros::Subscriber subleft = n.subscribe("/left_wheel/rpm", 1, callbackleft);
     ros::Subscriber subright = n.subscribe("/right_wheel/rpm", 1, callbackright);
     ros::Publisher pub = n.advertise<geometry_msgs::Point>("/car_position", 1);
+    geometry_msgs::Point msg;
     while (ros::ok()){
         caculate(&velocity,&position);
-        geometry_msgs::Point msg;
         #ifdef DEBUG
         cout<<"x is "<<position.x<<", y is "<<position.y<<"theta_z is "<<position.th<<"\n";
         #endif
