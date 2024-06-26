@@ -119,7 +119,7 @@ int main(int argc, char** argv){
     ros::NodeHandle n;
     ros::Subscriber subleft = n.subscribe("/left_wheel/rpm", 1, callbackleft);
     ros::Subscriber subright = n.subscribe("/right_wheel/rpm", 1, callbackright);
-    ros::Publisher pub = n.advertise<geometry_msgs::Point>("car_position", 1);
+    ros::Publisher pub = n.advertise<geometry_msgs::Point>("/car_position", 1);
     while (ros::ok()){
         caculate(&velocity,&position);
         geometry_msgs::Point msg;
@@ -129,6 +129,9 @@ int main(int argc, char** argv){
         msg.x = position.x;
         msg.y = position.y;
         msg.z = position.th;
+        #ifdef DEBUG
+        cout<<"x is "<<msg.x<<", y is "<<msg.y<<"theta_z is "<<msg.z<<"\n";
+        #endif
         pub.publish(msg);
         ros::spinOnce();
     }
