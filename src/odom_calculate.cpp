@@ -109,12 +109,18 @@ void caculate(Velocity* velocity, Position* position){
     return;
 }
 
+void clear(Velocity* velocity, Position* position){
+    velocity->omega_L = 0.0;
+    velocity->omega_R = 0.0;
+    position->x = 0.0;
+    position->y = 0.0;
+    position->th = 0.0;
+}
+
 int main(int argc, char** argv){
     ros::init(argc, argv, "odom_calculate");
-
-    position.x = 0.0;
-    position.y = 0.0;
-    position.th = 0.0;
+    
+    clear(&velocity,&position);
 
     ros::NodeHandle n;
     ros::Subscriber subleft = n.subscribe("/left_wheel/rpm", 1, callbackleft);
