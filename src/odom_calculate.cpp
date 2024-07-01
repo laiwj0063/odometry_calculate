@@ -66,29 +66,30 @@ MotionState calculateMotion(Velocity* velocity, double R, double L, Position* po
 void callbackleft(const std_msgs::Float64::ConstPtr& data){
     velocity.omega_L = data->data;
     velocity.omega_L /= 60.0;
+    velocity.omega_L *= 2*M_1_PI;
 }
 void callbackright(const std_msgs::Float64::ConstPtr& data){
     velocity.omega_R = data->data;
     velocity.omega_R /= 60.0;
+    velocity.omega_R *= 2*M_1_PI;
 }
 
 void caculate(Velocity* velocity, Position* position){
 
-    ros::Time current_time, last_time;
-    current_time = ros::Time::now();
-    last_time = ros::Time::now();
+    static ros::Time last_time = ros::Time::now();
 
     double R = 0.1;  // 轮子半径
     double L = 0.5;  // 轮子间的轴距
 
-    ros::Rate r(1.0);
+    ros::Rate r(10);
    
-    current_time = ros::Time::now();
+    ros::Time current_time = ros::Time::now();
 
     // Compute time step
     double dt = (current_time - last_time).toSec();       
 
     #ifdef DEBUG
+    cout<<"dt is"<<dt<<"\n";
     cout<<"omega_L is "<<velocity->omega_L<<"\n";
     cout<<"omega_R is "<<velocity->omega_R<<"\n";
     #endif
@@ -101,13 +102,15 @@ void caculate(Velocity* velocity, Position* position){
     position->y += motion.vy * dt;
     position->th += motion.omega * dt;
 
-    if(position->th>=360) position->th -=360;
-    else if(position->th<0) position->th += 360;
+    position->th = fmod(position->th, 360.0);
+    if (position->th < 0)   position->th += 360.0;
 
     #ifdef DEBUG
     cout<<"x is "<<position->x<<", y is "<<position->y<<", theta_z is "<<position->th<<"\n";
     cout<<"-------------------------------------------------------------\n";
     #endif
+
+    last_time = current_time;
 
     return;
 }
