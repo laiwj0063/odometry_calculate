@@ -66,12 +66,12 @@ MotionState calculateMotion(Velocity* velocity, double R, double L, Position* po
 void callbackleft(const std_msgs::Float64::ConstPtr& data){
     velocity.omega_L = data->data;
     velocity.omega_L /= 60.0;
-    velocity.omega_L *= 2*M_1_PI;
+    velocity.omega_L *= 2*M_PI;
 }
 void callbackright(const std_msgs::Float64::ConstPtr& data){
     velocity.omega_R = data->data;
     velocity.omega_R /= 60.0;
-    velocity.omega_R *= 2*M_1_PI;
+    velocity.omega_R *= 2*M_PI;
 }
 
 void caculate(Velocity* velocity, Position* position){
@@ -102,8 +102,8 @@ void caculate(Velocity* velocity, Position* position){
     position->y += motion.vy * dt;
     position->th += motion.omega * dt;
 
-    position->th = fmod(position->th, 360.0);
-    if (position->th < 0)   position->th += 360.0;
+    position->th = fmod(position->th, 2 * M_PI);
+    if (position->th < 0)   position->th += 2 * M_PI;
 
     #ifdef DEBUG
     cout<<"x is "<<position->x<<", y is "<<position->y<<", theta_z is "<<position->th<<"\n";
